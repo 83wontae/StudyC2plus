@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 
 enum class Color { DarkBlue, Black, Red };
@@ -71,3 +72,4 @@ void bbb()
 {
 
 }
+*/
