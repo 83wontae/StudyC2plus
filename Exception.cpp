@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <vector>
 #include <array>
@@ -24,3 +25,4 @@ int main()
 		cout << "Exception caught: " << exception.what() << endl;
 	}
 }
+*/
