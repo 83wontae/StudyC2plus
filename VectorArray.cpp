@@ -1,7 +1,7 @@
+/*
 #include <iostream>
 #include <vector>
 #include <array>
-#include <tuple>
 
 using namespace std;
 
@@ -33,6 +33,7 @@ int main()
 
 	array<int, 3> values = { 11, 22, 33 };
 	
-	auto [a, b, c] = values; // 안되면 C++ 2017 언어를 사용하지 않고 있다. ( "프로젝트 속성 - 일반 - C++ 언어 표준" 확인 )
+	auto [a, b, c] = values; // 안되면 C++ 2017 언어 이상 버전를 사용하지 않고 있다. ( "프로젝트 속성 - 일반 - C++ 언어 표준" 확인 )
 
 }
+*/
