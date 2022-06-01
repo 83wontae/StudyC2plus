@@ -1,5 +1,5 @@
 /*
-#include <iostream>
+\#include <iostream>
 #include <vector>
 #include <array>
 
@@ -12,7 +12,11 @@ int main()
 	myArray1[1] = 0;
 	myArray1[2] = 0;
 
-	int myArray2[] = { 1,2,3,4 };
+	int myArray2[] = { 1,2,3,4 };//배열 크기는 4
+	int myArray3[]{ 1,2,3,4 };// "=" 생략 가능
+	int myArray4[5]{ 1,2,3 };// 3, 4는 0으로 초기화됨
+
+	int myArray5[2][4] = { {1,2,3,4}, {5,6,7,8} }; //2차원 이상 배열일 경우 행우선 저장
 
 	unsigned int array1Size = size(myArray1);
 	unsigned int array2Size = sizeof(myArray2);

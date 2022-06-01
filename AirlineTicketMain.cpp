@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include "AirlineTicket.h"
 #include "CircleClass.h"
@@ -6,7 +7,6 @@ using namespace std;
 
 int main()
 {
-	/*
 	AirlineTicket myTicket;
 	myTicket.setPassengerName("Sherman T. Socketwrench");
 	myTicket.setNumberOfMiles(700);
@@ -50,10 +50,10 @@ int main()
 
 	int* pArray = new int[4]{ 0,1,2,3 };
 
-	auto a = { 11 };
-	auto b = { 11, 22 };
+	//auto a = { 11 };
+	//auto b = { 11, 22 };
 
-	auto c { 11 };
-	auto d { 11, 22 };
-	*/
+	//auto c { 11 };
+	//auto d { 11, 22 };//error
 }
+*/
