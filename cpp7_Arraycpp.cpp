@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <vector>
 #include <array>
@@ -44,3 +45,4 @@ int main()
 
 	cout << " 배열의 최대값 : " << Max << endl;
 }
+*/
