@@ -142,11 +142,13 @@
     <ClCompile Include="Counter.cpp" />
     <ClCompile Include="CounterM.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NamedObj.cpp" />
     <ClCompile Include="VecF.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Counter.h" />
     <ClInclude Include="CounterM.h" />
+    <ClInclude Include="NamedObj.h" />
     <ClInclude Include="VecF.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
