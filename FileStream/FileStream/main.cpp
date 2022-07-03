@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 
@@ -92,6 +93,10 @@ void ReadPerson(person& p, string str)
 	}
 }
 
+bool compare(person a, person b) {
+	return a.score > b.score;
+}
+
 void aaa()
 {
 	vector<person> arr;
@@ -110,6 +115,12 @@ void aaa()
 	else {
 		cout << "Unable to open file" << endl;
 	}
+
+	sort(arr.begin(), arr.end(),
+		[](person a, person b) {
+			return a.score > b.score;
+		}
+	);
 
 	for (person p : arr)
 	{
