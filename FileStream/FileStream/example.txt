@@ -1,0 +1,5 @@
+name=aaa, score =100
+name=bbb, score =50
+name=ccc, score =70
+name=ddd, score =90
+name=eee, score =80
