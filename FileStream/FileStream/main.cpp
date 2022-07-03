@@ -34,55 +34,6 @@ void WriteFile()
 	}
 }
 
-struct person
-{
-	string name;
-	int score;
-};
-
-void ReadPerson(person& p, string str)
-{
-	int index = 0;
-	while (1)
-	{
-		vector<string> arrStr;
-		arrStr = StringCutByKey(str, ",");
-		for (string s : arrStr)
-		{
-			string lstr;
-			string rstr;
-			StringCutHelfByKey(s, "=", lstr, rstr);
-			if (lstr == "name")
-			{
-				p.name = rstr;
-			}
-			else if (lstr == "score")
-			{
-				p.score = rstr;
-			}
-		}
-	}
-}
-
-void aaa()
-{
-	vector<person> arr;
-
-	string line;
-	ifstream file("example.txt");
-	if (file.is_open()) {
-		//while (getline(file, ' ')) // ' '<- 공백기준으로 자르기
-		while (getline(file, line)) {
-			person p;
-			ReadPerson(p, line);
-		}
-		file.close();
-	}
-	else {
-		cout << "Unable to open file" << endl;
-	}
-}
-
 vector<string> StringCutByKey(string source, string key)
 {
 	vector<string> arrStr;
@@ -113,6 +64,60 @@ void StringCutHelfByKey(string source, string key, string& leftstr, string& righ
 	rightstr = source.substr(index + 1);
 }
 
+struct person
+{
+	string name;
+	int score;
+};
+
+void ReadPerson(person& p, string str)
+{
+	int index = 0;
+
+	vector<string> arrStr;
+	arrStr = StringCutByKey(str, ",");
+	for (string s : arrStr)
+	{
+		string lstr;
+		string rstr;
+		StringCutHelfByKey(s, "=", lstr, rstr);
+		if (lstr == "name")
+		{
+			p.name = rstr;
+		}
+		else if (lstr == "score")
+		{
+			p.score = stoi(rstr);
+		}
+	}
+}
+
+void aaa()
+{
+	vector<person> arr;
+
+	string line;
+	ifstream file("example.txt");
+	if (file.is_open()) {
+		//while (getline(file, ' ')) // ' '<- 공백기준으로 자르기
+		while (getline(file, line)) {
+			person p;
+			ReadPerson(p, line);
+			arr.push_back(p);
+		}
+		file.close();
+	}
+	else {
+		cout << "Unable to open file" << endl;
+	}
+
+	for (person p : arr)
+	{
+		cout << p.name << " " << p.score << endl;
+	}
+}
+
+
 int main() {
-	
+	aaa();
 }
