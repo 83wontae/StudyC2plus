@@ -6,9 +6,10 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
-const int BUF_SIZE = 1024;
+#define DEFAULT_BUFLEN 512 // 수신 버퍼 크기
+#define DEFAULT_PORT "27015" // 사용할 포트 번호 선언
+
 const int MAX_CLIENT = 10;
-const int PORT = 12345;
 
 int clientCount = 0;
 SOCKET clients[MAX_CLIENT];
@@ -22,7 +23,7 @@ void broadcastMessage(const char* message, int sender)
     {
         if (i != sender)
         {
-            send(clients[i], message, BUF_SIZE, 0);
+            send(clients[i], message, DEFAULT_BUFLEN, 0);
         }
     }
 
@@ -31,11 +32,11 @@ void broadcastMessage(const char* message, int sender)
 
 void clientHandler(int idx)
 {
-    char buffer[BUF_SIZE];
+    char buffer[DEFAULT_BUFLEN];
 
     while (true)
     {
-        int bytesReceived = recv(clients[idx], buffer, BUF_SIZE, 0);
+        int bytesReceived = recv(clients[idx], buffer, DEFAULT_BUFLEN, 0);
 
         if (bytesReceived <= 0)
         {
@@ -60,32 +61,79 @@ void clientHandler(int idx)
     }
 }
 
-int main()
+int __cdecl main(void)
 {
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    int iResult;
 
-    SOCKET server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    SOCKET ListenSocket = INVALID_SOCKET;
+    SOCKET ClientSocket = INVALID_SOCKET;
 
-    sockaddr_in serverAddr;
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-    serverAddr.sin_port = htons(PORT);
+    struct addrinfo* result = NULL;
+    struct addrinfo hints;
 
-    bind(server, (sockaddr*)&serverAddr, sizeof(serverAddr));
-    listen(server, MAX_CLIENT);
+    // Initialize Winsock
+    iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (iResult != 0) {
+        printf("WSAStartup failed with error: %d\n", iResult);
+        return 1;
+    }
 
-    std::cout << "Chat server started on port " << PORT << std::endl;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_flags = AI_PASSIVE;
+
+    // Resolve the server address and port
+    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+    if (iResult != 0) {
+        printf("getaddrinfo failed with error: %d\n", iResult);
+        WSACleanup();
+        return 1;
+    }
+
+    // Create a SOCKET for the server to listen for client connections.
+    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    if (ListenSocket == INVALID_SOCKET) {
+        printf("socket failed with error: %ld\n", WSAGetLastError());
+        freeaddrinfo(result);
+        WSACleanup();
+        return 1;
+    }
+
+    // Setup the TCP listening socket
+    iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
+    if (iResult == SOCKET_ERROR) {
+        printf("bind failed with error: %d\n", WSAGetLastError());
+        freeaddrinfo(result);
+        closesocket(ListenSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    freeaddrinfo(result);
+
+    iResult = listen(ListenSocket, MAX_CLIENT);
+    if (iResult == SOCKET_ERROR) {
+        printf("listen failed with error: %d\n", WSAGetLastError());
+        closesocket(ListenSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    std::cout << "Chat server started on port " << DEFAULT_PORT << std::endl;
 
     while (true)
     {
-        SOCKET client = accept(server, NULL, NULL);
+        // Accept a client socket
+        SOCKET ClientSocket = accept(ListenSocket, NULL, NULL);
 
         if (clientCount < MAX_CLIENT)
         {
             mtx.lock();
 
-            clients[clientCount++] = client;
+            clients[clientCount++] = ClientSocket;
 
             mtx.unlock();
 
@@ -94,7 +142,7 @@ int main()
         }
         else
         {
-            closesocket(client);
+            closesocket(ClientSocket);
         }
     }
 
